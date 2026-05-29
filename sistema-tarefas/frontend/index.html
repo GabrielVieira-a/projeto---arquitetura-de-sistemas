@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Tarefas</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <h1>Sistema de Gerenciamento</h1>
+
+    <!-- USUÁRIOS -->
+
+    <section>
+
+        <h2>Usuários</h2>
+
+        <input type="text" id="nomeUsuario" placeholder="Nome">
+
+        <input type="email" id="emailUsuario" placeholder="Email">
+
+        <button onclick="criarUsuario()">
+            Cadastrar Usuário
+        </button>
+
+        <h3>Lista de Usuários</h3>
+
+        <ul id="listaUsuarios"></ul>
+
+    </section>
+
+    <hr>
+
+    <!-- TAREFAS -->
+
+    <section>
+
+        <h2>Tarefas</h2>
+
+        <input type="text" id="tituloTarefa" placeholder="Título">
+
+        <input type="text" id="descricaoTarefa" placeholder="Descrição">
+
+        <input type="text" id="statusTarefa" placeholder="Status">
+
+        <button onclick="criarTarefa()">
+            Criar Tarefa
+        </button>
+
+        <h3>Lista de Tarefas</h3>
+
+        <ul id="listaTarefas"></ul>
+
+    </section>
+
+    <script src="script.js"></script>
+
+</body>
+</html>
