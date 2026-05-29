@@ -94,6 +94,8 @@ Repositories
    ↓
 Database Singleton
 
+```
+
 # 🚀 Como Executar a Aplicação
 
 ## ✅ 1. Clonar o Repositório
