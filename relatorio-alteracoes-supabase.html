@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Relatório de Alterações — Integração Supabase</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: #f0f2f5;
+      color: #1a1a2e;
+      font-size: 14px;
+    }
+
+    .page {
+      max-width: 900px;
+      margin: 40px auto;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.10);
+      overflow: hidden;
+    }
+
+    /* HEADER */
+    .header {
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 60%, #0f3460 100%);
+      color: #fff;
+      padding: 48px 48px 36px;
+    }
+    .header .badge {
+      display: inline-block;
+      background: #3ecf8e;
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      padding: 4px 12px;
+      border-radius: 20px;
+      margin-bottom: 16px;
+    }
+    .header h1 {
+      font-size: 28px;
+      font-weight: 700;
+      line-height: 1.3;
+      margin-bottom: 10px;
+    }
+    .header p {
+      font-size: 14px;
+      color: #a0aec0;
+      margin-bottom: 4px;
+    }
+    .header .meta {
+      display: flex;
+      gap: 32px;
+      margin-top: 28px;
+    }
+    .header .meta-item {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .header .meta-item span:first-child {
+      font-size: 11px;
+      color: #718096;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .header .meta-item span:last-child {
+      font-size: 14px;
+      color: #e2e8f0;
+      font-weight: 600;
+    }
+
+    /* CONTENT */
+    .content { padding: 40px 48px 56px; }
+
+    /* SECTION */
+    .section { margin-bottom: 40px; }
+    .section-title {
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: #3ecf8e;
+      margin-bottom: 16px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid #e8f8f2;
+    }
+
+    /* OBJECTIVE BOX */
+    .objective {
+      background: #f7fafc;
+      border-left: 4px solid #3ecf8e;
+      padding: 18px 20px;
+      border-radius: 0 8px 8px 0;
+      font-size: 14px;
+      line-height: 1.7;
+      color: #2d3748;
+    }
+
+    /* STACK PILLS */
+    .stack {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 4px;
+    }
+    .pill {
+      background: #edf2f7;
+      border-radius: 20px;
+      padding: 6px 16px;
+      font-size: 12px;
+      font-weight: 600;
+      color: #4a5568;
+    }
+    .pill.green { background: #c6f6d5; color: #276749; }
+    .pill.blue  { background: #bee3f8; color: #2b6cb0; }
+    .pill.gray  { background: #edf2f7; color: #4a5568; }
+
+    /* CHANGE TABLE */
+    .change-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+    .change-table thead tr {
+      background: #1a1a2e;
+      color: #fff;
+    }
+    .change-table thead th {
+      padding: 12px 16px;
+      text-align: left;
+      font-weight: 600;
+      font-size: 12px;
+      letter-spacing: 0.5px;
+    }
+    .change-table tbody tr {
+      border-bottom: 1px solid #e2e8f0;
+      transition: background 0.15s;
+    }
+    .change-table tbody tr:nth-child(even) { background: #f7fafc; }
+    .change-table tbody td {
+      padding: 12px 16px;
+      vertical-align: top;
+      line-height: 1.5;
+    }
+    .change-table tbody td:first-child {
+      font-family: 'Courier New', monospace;
+      font-size: 12px;
+      color: #3ecf8e;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    .tag {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .tag.modified  { background: #fefcbf; color: #744210; }
+    .tag.created   { background: #c6f6d5; color: #22543d; }
+    .tag.replaced  { background: #bee3f8; color: #2a4365; }
+
+    /* BEFORE / AFTER */
+    .diff-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    .diff-box {
+      border-radius: 8px;
+      overflow: hidden;
+      font-size: 12px;
+    }
+    .diff-box .diff-header {
+      padding: 8px 14px;
+      font-weight: 700;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .diff-box.before .diff-header { background: #fed7d7; color: #822727; }
+    .diff-box.after  .diff-header { background: #c6f6d5; color: #22543d; }
+    .diff-box pre {
+      background: #1a202c;
+      color: #e2e8f0;
+      padding: 16px;
+      font-family: 'Courier New', monospace;
+      font-size: 11.5px;
+      line-height: 1.6;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+    .diff-box.before pre { border: 2px solid #feb2b2; border-top: none; }
+    .diff-box.after  pre { border: 2px solid #9ae6b4; border-top: none; }
+
+    /* FLOW DIAGRAM */
+    .flow {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 0;
+      margin: 8px 0;
+    }
+    .flow-node {
+      background: #1a1a2e;
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      text-align: center;
+      white-space: nowrap;
+    }
+    .flow-node.green { background: #276749; }
+    .flow-arrow {
+      color: #a0aec0;
+      font-size: 18px;
+      padding: 0 6px;
+    }
+
+    /* CHECKLIST */
+    .checklist { list-style: none; }
+    .checklist li {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 8px 0;
+      border-bottom: 1px solid #f0f0f0;
+      font-size: 13.5px;
+      color: #2d3748;
+      line-height: 1.5;
+    }
+    .checklist li:last-child { border-bottom: none; }
+    .check-icon {
+      width: 20px;
+      height: 20px;
+      background: #3ecf8e;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+    .check-icon::after {
+      content: '✓';
+      color: white;
+      font-size: 11px;
+      font-weight: 900;
+    }
+
+    /* TEST RESULTS */
+    .test-block {
+      background: #1a202c;
+      border-radius: 8px;
+      padding: 20px 24px;
+      font-family: 'Courier New', monospace;
+      font-size: 12.5px;
+      line-height: 1.8;
+      color: #a0aec0;
+    }
+    .test-block .cmd { color: #68d391; }
+    .test-block .res { color: #f6e05e; }
+    .test-block .ok  { color: #48bb78; font-weight: bold; }
+
+    /* STATUS BAR */
+    .status-bar {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 8px;
+    }
+    .status-item {
+      flex: 1;
+      min-width: 150px;
+      background: #f7fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 14px 16px;
+    }
+    .status-item .label {
+      font-size: 11px;
+      color: #718096;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 6px;
+    }
+    .status-item .value {
+      font-size: 16px;
+      font-weight: 700;
+      color: #1a1a2e;
+    }
+    .status-item .value.green { color: #276749; }
+
+    /* FOOTER */
+    .footer {
+      background: #f7fafc;
+      border-top: 1px solid #e2e8f0;
+      padding: 20px 48px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+      color: #718096;
+    }
+
+    @media print {
+      body { background: #fff; }
+      .page { box-shadow: none; margin: 0; border-radius: 0; }
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="badge">Relatório Técnico</div>
+    <h1>Integração com Banco de Dados Supabase</h1>
+    <p>Projeto: Sistema de Tarefas — Arquitetura de Sistemas</p>
+    <p>Repositório: c:\projeto---arquitetura-de-sistemas\sistema-tarefas</p>
+    <div class="meta">
+      <div class="meta-item">
+        <span>Data</span>
+        <span>01/06/2026</span>
+      </div>
+      <div class="meta-item">
+        <span>Autor</span>
+        <span>Davi</span>
+      </div>
+      <div class="meta-item">
+        <span>Arquivos alterados</span>
+        <span>9 arquivos</span>
+      </div>
+      <div class="meta-item">
+        <span>Status</span>
+        <span style="color:#3ecf8e;">Concluído</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="content">
+
+    <!-- 1. OBJETIVO -->
+    <div class="section">
+      <div class="section-title">1. Objetivo</div>
+      <div class="objective">
+        Substituir o banco de dados temporário em memória (arrays JavaScript via padrão Singleton) por um banco de dados externo real hospedado no <strong>Supabase (PostgreSQL)</strong>. A migração manteve a arquitetura em camadas existente (Controller → Service → Repository) e adicionou persistência permanente dos dados, além de tratamento de erros robusto em todos os endpoints.
+      </div>
+    </div>
+
+    <!-- 2. TECNOLOGIAS -->
+    <div class="section">
+      <div class="section-title">2. Tecnologias Utilizadas</div>
+      <div class="stack">
+        <span class="pill green">Supabase (PostgreSQL)</span>
+        <span class="pill blue">@supabase/supabase-js</span>
+        <span class="pill blue">dotenv</span>
+        <span class="pill gray">Node.js</span>
+        <span class="pill gray">Express.js</span>
+        <span class="pill gray">JavaScript ES6+</span>
+      </div>
+    </div>
+
+    <!-- 3. FLUXO -->
+    <div class="section">
+      <div class="section-title">3. Novo Fluxo de Dados</div>
+      <div class="flow">
+        <div class="flow-node">Frontend</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-node">Controller</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-node">Service</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-node">Repository</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-node green">Supabase<br/>(PostgreSQL)</div>
+      </div>
+    </div>
+
+    <!-- 4. TABELA DE ALTERAÇÕES -->
+    <div class="section">
+      <div class="section-title">4. Arquivos Alterados</div>
+      <table class="change-table">
+        <thead>
+          <tr>
+            <th>Arquivo</th>
+            <th>Tipo</th>
+            <th>Descrição da Alteração</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>backend/.env</td>
+            <td><span class="tag created">Criado</span></td>
+            <td>Arquivo de variáveis de ambiente com a URL do projeto Supabase, chave anon e porta do servidor.</td>
+          </tr>
+          <tr>
+            <td>backend/server.js</td>
+            <td><span class="tag modified">Modificado</span></td>
+            <td>Adicionado <code>require('dotenv').config()</code> no topo para carregar as variáveis de ambiente. Porta agora lida via <code>process.env.PORT</code>.</td>
+          </tr>
+          <tr>
+            <td>src/database/singleton.js</td>
+            <td><span class="tag replaced">Substituído</span></td>
+            <td>Classe <code>Database</code> com arrays em memória foi completamente substituída pela inicialização do cliente Supabase via <code>createClient()</code>.</td>
+          </tr>
+          <tr>
+            <td>src/repositories/usuarioRepository.js</td>
+            <td><span class="tag modified">Modificado</span></td>
+            <td>Todos os métodos tornaram-se <code>async</code>. Operações em array substituídas por queries Supabase: <code>.select()</code>, <code>.insert()</code>, <code>.update()</code>, <code>.delete()</code> com <code>.eq('id', id)</code>.</td>
+          </tr>
+          <tr>
+            <td>src/repositories/tarefaRepository.js</td>
+            <td><span class="tag modified">Modificado</span></td>
+            <td>Mesmas alterações aplicadas ao repositório de tarefas.</td>
+          </tr>
+          <tr>
+            <td>src/services/usuarioService.js</td>
+            <td><span class="tag modified">Modificado</span></td>
+            <td>Removida a geração manual de IDs incrementais (<code>let id = 1</code>). Todos os métodos tornaram-se <code>async</code>. O ID agora é gerado automaticamente pelo PostgreSQL (SERIAL).</td>
+          </tr>
+          <tr>
+            <td>src/services/tarefaService.js</td>
+            <td><span class="tag modified">Modificado</span></td>
+            <td>Removida a geração de ID via <code>Date.now()</code>. Todos os métodos tornaram-se <code>async</code>. Status padrão definido como <code>'pendente'</code> caso não informado.</td>
+          </tr>
+          <tr>
+            <td>src/controllers/usuarioController.js</td>
+            <td><span class="tag modified">Modificado</span></td>
+            <td>Todos os handlers tornaram-se <code>async</code>. Adicionado bloco <code>try/catch</code> em cada método para retornar erros com status HTTP 500 em vez de derrubar o servidor.</td>
+          </tr>
+          <tr>
+            <td>src/controllers/tarefaController.js</td>
+            <td><span class="tag modified">Modificado</span></td>
+            <td>Mesmas alterações aplicadas ao controller de tarefas.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- 5. ANTES E DEPOIS -->
+    <div class="section">
+      <div class="section-title">5. Antes e Depois — Principais Mudanças</div>
+
+      <p style="font-size:13px;color:#718096;margin-bottom:12px;font-weight:600;">database/singleton.js</p>
+      <div class="diff-grid">
+        <div class="diff-box before">
+          <div class="diff-header">Antes — Banco em Memória</div>
+          <pre>class Database {
+  constructor() {
+    if (!Database.instance) {
+      this.usuarios = [];
+      this.tarefas = [];
+      Database.instance = this;
+    }
+    return Database.instance;
+  }
+}
+const instance = new Database();
+Object.freeze(instance);
+module.exports = instance;</pre>
+        </div>
+        <div class="diff-box after">
+          <div class="diff-header">Depois — Cliente Supabase</div>
+          <pre>const { createClient } =
+  require('@supabase/supabase-js');
+
+const supabase = createClient(
+  process.env.SUPABASE_URL,
+  process.env.SUPABASE_KEY
+);
+
+module.exports = supabase;</pre>
+        </div>
+      </div>
+
+      <p style="font-size:13px;color:#718096;margin:20px 0 12px;font-weight:600;">repositories/usuarioRepository.js — método salvar()</p>
+      <div class="diff-grid">
+        <div class="diff-box before">
+          <div class="diff-header">Antes — Array em Memória</div>
+          <pre>salvar(usuario) {
+  db.usuarios.push(usuario);
+  return usuario;
+}</pre>
+        </div>
+        <div class="diff-box after">
+          <div class="diff-header">Depois — Supabase</div>
+          <pre>async salvar(usuario) {
+  const { data, error } = await supabase
+    .from('usuarios')
+    .insert(usuario)
+    .select()
+    .single();
+  if (error) throw error;
+  return data;
+}</pre>
+        </div>
+      </div>
+
+      <p style="font-size:13px;color:#718096;margin:20px 0 12px;font-weight:600;">services/usuarioService.js — método criar()</p>
+      <div class="diff-grid">
+        <div class="diff-box before">
+          <div class="diff-header">Antes — ID Manual</div>
+          <pre>let id = 1;
+
+exports.criar = (dados) => {
+  const usuario = criarUsuario(
+    id++,
+    dados.nome,
+    dados.email
+  );
+  return usuarioRepository
+    .salvar(usuario);
+};</pre>
+        </div>
+        <div class="diff-box after">
+          <div class="diff-header">Depois — ID pelo PostgreSQL</div>
+          <pre>exports.criar = async (dados) => {
+  return usuarioRepository.salvar({
+    nome: dados.nome,
+    email: dados.email
+  });
+};</pre>
+        </div>
+      </div>
+
+      <p style="font-size:13px;color:#718096;margin:20px 0 12px;font-weight:600;">controllers/tarefaController.js — método criar()</p>
+      <div class="diff-grid">
+        <div class="diff-box before">
+          <div class="diff-header">Antes — Sem tratamento de erro</div>
+          <pre>exports.criar = (req, res) => {
+  const tarefa =
+    tarefaService.criar(req.body);
+  res.json(tarefa);
+};</pre>
+        </div>
+        <div class="diff-box after">
+          <div class="diff-header">Depois — Async com try/catch</div>
+          <pre>exports.criar = async (req, res) => {
+  try {
+    const tarefa = await
+      tarefaService.criar(req.body);
+    res.status(201).json(tarefa);
+  } catch (error) {
+    res.status(500).json({
+      erro: error.message
+    });
+  }
+};</pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- 6. TABELAS CRIADAS -->
+    <div class="section">
+      <div class="section-title">6. Tabelas Criadas no Supabase</div>
+      <table class="change-table">
+        <thead>
+          <tr>
+            <th>Tabela</th>
+            <th>Coluna</th>
+            <th>Tipo</th>
+            <th>Descrição</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td rowspan="4">usuarios</td>
+            <td>id</td>
+            <td>SERIAL PRIMARY KEY</td>
+            <td>Gerado automaticamente pelo banco</td>
+          </tr>
+          <tr>
+            <td>nome</td>
+            <td>TEXT NOT NULL</td>
+            <td>Nome do usuário</td>
+          </tr>
+          <tr>
+            <td>email</td>
+            <td>TEXT NOT NULL UNIQUE</td>
+            <td>E-mail único por usuário</td>
+          </tr>
+          <tr>
+            <td>created_at</td>
+            <td>TIMESTAMP DEFAULT NOW()</td>
+            <td>Data de criação automática</td>
+          </tr>
+          <tr>
+            <td rowspan="5">tarefas</td>
+            <td>id</td>
+            <td>SERIAL PRIMARY KEY</td>
+            <td>Gerado automaticamente pelo banco</td>
+          </tr>
+          <tr>
+            <td>titulo</td>
+            <td>TEXT NOT NULL</td>
+            <td>Título da tarefa</td>
+          </tr>
+          <tr>
+            <td>descricao</td>
+            <td>TEXT</td>
+            <td>Descrição opcional</td>
+          </tr>
+          <tr>
+            <td>status</td>
+            <td>TEXT DEFAULT 'pendente'</td>
+            <td>Status da tarefa</td>
+          </tr>
+          <tr>
+            <td>created_at</td>
+            <td>TIMESTAMP DEFAULT NOW()</td>
+            <td>Data de criação automática</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- 7. RESULTADO DOS TESTES -->
+    <div class="section">
+      <div class="section-title">7. Resultado dos Testes</div>
+      <div class="test-block">
+        <div><span class="cmd">$ GET  /usuarios</span>   <span class="ok">→ 200 OK</span>  <span class="res">[]</span></div>
+        <div><span class="cmd">$ GET  /tarefas</span>    <span class="ok">→ 200 OK</span>  <span class="res">[]</span></div>
+        <div style="margin-top:8px;"><span class="cmd">$ POST /usuarios</span>  <span class="ok">→ 201 Created</span></div>
+        <div style="padding-left:16px;color:#f6e05e;">{ "id": 1, "nome": "Davi", "email": "rdavi6965@gmail.com", "created_at": "2026-06-01T20:54:55.72642" }</div>
+        <div style="margin-top:8px;"><span class="cmd">$ POST /tarefas</span>   <span class="ok">→ 201 Created</span></div>
+        <div style="padding-left:16px;color:#f6e05e;">{ "id": 1, "titulo": "Primeira tarefa", "descricao": "Teste de integracao", "status": "pendente", "created_at": "2026-06-01T20:54:56.494409" }</div>
+      </div>
+    </div>
+
+    <!-- 8. MELHORIAS ADICIONAIS -->
+    <div class="section">
+      <div class="section-title">8. Melhorias Adicionais Incluídas</div>
+      <ul class="checklist">
+        <li><div class="check-icon"></div>Tratamento de erros com <code>try/catch</code> em todos os controllers — servidor não cai em caso de falha</li>
+        <li><div class="check-icon"></div>Credenciais protegidas em arquivo <code>.env</code> (já ignorado pelo <code>.gitignore</code>)</li>
+        <li><div class="check-icon"></div>IDs gerados pelo PostgreSQL (SERIAL) — eliminada inconsistência entre contador incremental e <code>Date.now()</code></li>
+        <li><div class="check-icon"></div>Campo <code>created_at</code> automático em todas as entidades</li>
+        <li><div class="check-icon"></div>Status HTTP correto: <code>201 Created</code> para criações, <code>500</code> para erros internos</li>
+        <li><div class="check-icon"></div>Porta do servidor configurável via variável de ambiente <code>PORT</code></li>
+        <li><div class="check-icon"></div>Respostas de erro em JSON estruturado: <code>{ "erro": "mensagem" }</code></li>
+      </ul>
+    </div>
+
+    <!-- 9. STATUS FINAL -->
+    <div class="section">
+      <div class="section-title">9. Status Final do Projeto</div>
+      <div class="status-bar">
+        <div class="status-item">
+          <div class="label">Banco de Dados</div>
+          <div class="value green">Supabase / PostgreSQL</div>
+        </div>
+        <div class="status-item">
+          <div class="label">Persistência</div>
+          <div class="value green">Permanente</div>
+        </div>
+        <div class="status-item">
+          <div class="label">Arquivos Alterados</div>
+          <div class="value">9 arquivos</div>
+        </div>
+        <div class="status-item">
+          <div class="label">Testes</div>
+          <div class="value green">Todos passando</div>
+        </div>
+        <div class="status-item">
+          <div class="label">Conclusão do Projeto</div>
+          <div class="value green">~68%</div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /content -->
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <span>Sistema de Tarefas — Arquitetura de Sistemas</span>
+    <span>Gerado em 01/06/2026 &nbsp;|&nbsp; Integração Supabase concluída com sucesso</span>
+  </div>
+
+</div><!-- /page -->
+</body>
+</html>

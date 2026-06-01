@@ -1,31 +1,17 @@
-const usuarioRepository = require("../repositories/usuarioRepository");
+const usuarioRepository = require('../repositories/usuarioRepository');
 
-const { criarUsuario } = require("../models/usuario");
-
-let id = 1;
-
-exports.criar = (dados) => {
-
-    const usuario = criarUsuario(
-        id++,
-        dados.nome,
-        dados.email
-    );
-
-    return usuarioRepository.salvar(usuario);
+exports.criar = async (dados) => {
+    return usuarioRepository.salvar({ nome: dados.nome, email: dados.email });
 };
 
-exports.listar = () => {
-
+exports.listar = async () => {
     return usuarioRepository.listar();
 };
 
-exports.atualizar = (id, dados) => {
-
-    return usuarioRepository.atualizar(id, dados);
+exports.atualizar = async (id, dados) => {
+    return usuarioRepository.atualizar(id, { nome: dados.nome, email: dados.email });
 };
 
-exports.deletar = (id) => {
-
-    usuarioRepository.deletar(id);
+exports.deletar = async (id) => {
+    return usuarioRepository.deletar(id);
 };

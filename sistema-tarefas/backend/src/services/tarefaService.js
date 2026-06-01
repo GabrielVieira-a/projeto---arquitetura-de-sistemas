@@ -1,30 +1,25 @@
-const tarefaRepository = require("../repositories/tarefaRepository");
+const tarefaRepository = require('../repositories/tarefaRepository');
 
-const { criarTarefa } = require("../models/tarefa");
-
-exports.criar = (dados) => {
-
-    const tarefa = criarTarefa(
-        Date.now(),
-        dados.titulo,
-        dados.descricao,
-        dados.status
-    );
-
-    return tarefaRepository.salvar(tarefa);
+exports.criar = async (dados) => {
+    return tarefaRepository.salvar({
+        titulo: dados.titulo,
+        descricao: dados.descricao,
+        status: dados.status || 'pendente'
+    });
 };
 
-exports.listar = () => {
-
+exports.listar = async () => {
     return tarefaRepository.listar();
 };
 
-exports.atualizar = (id, dados) => {
-
-    return tarefaRepository.atualizar(id, dados);
+exports.atualizar = async (id, dados) => {
+    return tarefaRepository.atualizar(id, {
+        titulo: dados.titulo,
+        descricao: dados.descricao,
+        status: dados.status
+    });
 };
 
-exports.deletar = (id) => {
-
-    tarefaRepository.deletar(id);
+exports.deletar = async (id) => {
+    return tarefaRepository.deletar(id);
 };

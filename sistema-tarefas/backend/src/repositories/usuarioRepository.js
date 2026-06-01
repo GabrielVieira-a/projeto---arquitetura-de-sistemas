@@ -1,38 +1,40 @@
-const db = require("../database/singleton");
+const supabase = require('../database/singleton');
 
 class UsuarioRepository {
 
-    listar() {
-        return db.usuarios;
+    async listar() {
+        const { data, error } = await supabase.from('usuarios').select('*');
+        if (error) throw error;
+        return data;
     }
 
-    salvar(usuario) {
-
-        db.usuarios.push(usuario);
-
-        return usuario;
+    async salvar(usuario) {
+        const { data, error } = await supabase
+            .from('usuarios')
+            .insert(usuario)
+            .select()
+            .single();
+        if (error) throw error;
+        return data;
     }
 
-    atualizar(id, dados) {
-
-        const usuario = db.usuarios.find(
-            u => u.id == id
-        );
-
-        if (usuario) {
-
-            usuario.nome = dados.nome;
-            usuario.email = dados.email;
-        }
-
-        return usuario;
+    async atualizar(id, dados) {
+        const { data, error } = await supabase
+            .from('usuarios')
+            .update(dados)
+            .eq('id', id)
+            .select()
+            .single();
+        if (error) throw error;
+        return data;
     }
 
-    deletar(id) {
-
-        db.usuarios = db.usuarios.filter(
-            u => u.id != id
-        );
+    async deletar(id) {
+        const { error } = await supabase
+            .from('usuarios')
+            .delete()
+            .eq('id', id);
+        if (error) throw error;
     }
 }
 

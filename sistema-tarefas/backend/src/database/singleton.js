@@ -1,20 +1,8 @@
-class Database {
-    constructor() {
+const { createClient } = require('@supabase/supabase-js');
 
-        if (!Database.instance) {
+const supabase = createClient(
+    process.env.SUPABASE_URL,
+    process.env.SUPABASE_KEY
+);
 
-            this.usuarios = [];
-            this.tarefas = [];
-
-            Database.instance = this;
-        }
-
-        return Database.instance;
-    }
-}
-
-const instance = new Database();
-
-Object.freeze(instance);
-
-module.exports = instance;
+module.exports = supabase;

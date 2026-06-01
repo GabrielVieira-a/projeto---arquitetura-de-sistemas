@@ -1,34 +1,37 @@
-const usuarioService = require("../services/usuarioService");
+const usuarioService = require('../services/usuarioService');
 
-exports.criar = (req, res) => {
-
-    const usuario = usuarioService.criar(req.body);
-
-    res.json(usuario);
-};
-
-exports.listar = (req, res) => {
-
-    res.json(usuarioService.listar());
-};
-
-exports.atualizar = (req, res) => {
-
-    const usuario = usuarioService.atualizar(
-        req.params.id,
-        req.body
-    );
-
-    if (usuario) {
-        res.json(usuario);
-    } else {
-        res.status(404).send("Não encontrado");
+exports.criar = async (req, res) => {
+    try {
+        const usuario = await usuarioService.criar(req.body);
+        res.status(201).json(usuario);
+    } catch (error) {
+        res.status(500).json({ erro: error.message });
     }
 };
 
-exports.deletar = (req, res) => {
+exports.listar = async (req, res) => {
+    try {
+        const usuarios = await usuarioService.listar();
+        res.json(usuarios);
+    } catch (error) {
+        res.status(500).json({ erro: error.message });
+    }
+};
 
-    usuarioService.deletar(req.params.id);
+exports.atualizar = async (req, res) => {
+    try {
+        const usuario = await usuarioService.atualizar(req.params.id, req.body);
+        res.json(usuario);
+    } catch (error) {
+        res.status(500).json({ erro: error.message });
+    }
+};
 
-    res.send("Removido");
+exports.deletar = async (req, res) => {
+    try {
+        await usuarioService.deletar(req.params.id);
+        res.json({ mensagem: 'Removido com sucesso' });
+    } catch (error) {
+        res.status(500).json({ erro: error.message });
+    }
 };

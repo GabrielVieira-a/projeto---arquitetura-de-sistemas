@@ -1,39 +1,40 @@
-const db = require("../database/singleton");
+const supabase = require('../database/singleton');
 
 class TarefaRepository {
 
-    listar() {
-        return db.tarefas;
+    async listar() {
+        const { data, error } = await supabase.from('tarefas').select('*');
+        if (error) throw error;
+        return data;
     }
 
-    salvar(tarefa) {
-
-        db.tarefas.push(tarefa);
-
-        return tarefa;
+    async salvar(tarefa) {
+        const { data, error } = await supabase
+            .from('tarefas')
+            .insert(tarefa)
+            .select()
+            .single();
+        if (error) throw error;
+        return data;
     }
 
-    atualizar(id, dados) {
-
-        const tarefa = db.tarefas.find(
-            t => t.id == id
-        );
-
-        if (tarefa) {
-
-            tarefa.titulo = dados.titulo;
-            tarefa.descricao = dados.descricao;
-            tarefa.status = dados.status;
-        }
-
-        return tarefa;
+    async atualizar(id, dados) {
+        const { data, error } = await supabase
+            .from('tarefas')
+            .update(dados)
+            .eq('id', id)
+            .select()
+            .single();
+        if (error) throw error;
+        return data;
     }
 
-    deletar(id) {
-
-        db.tarefas = db.tarefas.filter(
-            t => t.id != id
-        );
+    async deletar(id) {
+        const { error } = await supabase
+            .from('tarefas')
+            .delete()
+            .eq('id', id);
+        if (error) throw error;
     }
 }
 
