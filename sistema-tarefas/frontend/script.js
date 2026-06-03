@@ -126,10 +126,29 @@ async function listarTarefas() {
             <div class="task-desc">${tarefa.descricao}</div>
             <div class="task-footer">
                 <span class="status-badge ${statusClass}">${tarefa.status || 'Sem status'}</span>
+                <select class="status-select" onchange="atualizarStatus(${tarefa.id}, this.value)">
+                    <option value="">Alterar status...</option>
+                    <option value="pendente">Pendente</option>
+                    <option value="em andamento">Em Andamento</option>
+                    <option value="concluida">Concluída</option>
+                </select>
             </div>
         `;
         lista.appendChild(item);
     });
+}
+
+async function atualizarStatus(id, novoStatus) {
+    if (!novoStatus) return;
+
+    await fetch(`${API_URL}/tarefas/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ status: novoStatus })
+    });
+
+    listarTarefas();
+    showToast('✓ Status atualizado!');
 }
 
 function limparCamposTarefa() {
