@@ -3,59 +3,104 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema de Tarefas</title>
-
+    <title>TaskManager — Sistema de Tarefas</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <h1>Sistema de Gerenciamento</h1>
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <div class="logo-icon">✓</div>
+                <span class="logo-text">TaskManager</span>
+            </div>
+            <span class="header-subtitle">Sistema de Gerenciamento de Tarefas</span>
+        </div>
+    </header>
 
-    <!-- USUÁRIOS -->
+    <main class="container">
+        <div class="grid">
 
-    <section>
+            <!-- USUÁRIOS -->
+            <section class="card">
+                <div class="card-header">
+                    <div class="card-icon card-icon--users">👤</div>
+                    <div>
+                        <h2 class="card-title">Usuários</h2>
+                        <p class="card-subtitle">Gerencie os usuários do sistema</p>
+                    </div>
+                </div>
 
-        <h2>Usuários</h2>
+                <div class="form-group">
+                    <label class="label" for="nomeUsuario">Nome completo</label>
+                    <input class="input" type="text" id="nomeUsuario" placeholder="Ex: João Silva">
+                </div>
 
-        <input type="text" id="nomeUsuario" placeholder="Nome">
+                <div class="form-group">
+                    <label class="label" for="emailUsuario">E-mail</label>
+                    <input class="input" type="email" id="emailUsuario" placeholder="Ex: joao@email.com">
+                </div>
 
-        <input type="email" id="emailUsuario" placeholder="Email">
+                <button class="btn btn--primary" onclick="criarUsuario()">
+                    <span>＋</span> Cadastrar Usuário
+                </button>
 
-        <button onclick="criarUsuario()">
-            Cadastrar Usuário
-        </button>
+                <div class="list-header">
+                    <h3 class="list-title">Lista de Usuários</h3>
+                    <span class="badge-count" id="countUsuarios">0</span>
+                </div>
 
-        <h3>Lista de Usuários</h3>
+                <ul id="listaUsuarios" class="list"></ul>
+            </section>
 
-        <ul id="listaUsuarios"></ul>
+            <!-- TAREFAS -->
+            <section class="card">
+                <div class="card-header">
+                    <div class="card-icon card-icon--tasks">📋</div>
+                    <div>
+                        <h2 class="card-title">Tarefas</h2>
+                        <p class="card-subtitle">Organize e acompanhe suas tarefas</p>
+                    </div>
+                </div>
 
-    </section>
+                <div class="form-group">
+                    <label class="label" for="tituloTarefa">Título</label>
+                    <input class="input" type="text" id="tituloTarefa" placeholder="Ex: Revisar relatório">
+                </div>
 
-    <hr>
+                <div class="form-group">
+                    <label class="label" for="descricaoTarefa">Descrição</label>
+                    <input class="input" type="text" id="descricaoTarefa" placeholder="Ex: Revisar o relatório mensal...">
+                </div>
 
-    <!-- TAREFAS -->
+                <div class="form-group">
+                    <label class="label" for="statusTarefa">Status</label>
+                    <select class="input select" id="statusTarefa">
+                        <option value="">Selecione o status</option>
+                        <option value="pendente">Pendente</option>
+                        <option value="em andamento">Em Andamento</option>
+                        <option value="concluida">Concluída</option>
+                    </select>
+                </div>
 
-    <section>
+                <button class="btn btn--primary" onclick="criarTarefa()">
+                    <span>＋</span> Criar Tarefa
+                </button>
 
-        <h2>Tarefas</h2>
+                <div class="list-header">
+                    <h3 class="list-title">Lista de Tarefas</h3>
+                    <span class="badge-count" id="countTarefas">0</span>
+                </div>
 
-        <input type="text" id="tituloTarefa" placeholder="Título">
+                <ul id="listaTarefas" class="list"></ul>
+            </section>
 
-        <input type="text" id="descricaoTarefa" placeholder="Descrição">
+        </div>
+    </main>
 
-        <input type="text" id="statusTarefa" placeholder="Status">
-
-        <button onclick="criarTarefa()">
-            Criar Tarefa
-        </button>
-
-        <h3>Lista de Tarefas</h3>
-
-        <ul id="listaTarefas"></ul>
-
-    </section>
+    <div class="toast" id="toast"></div>
 
     <script src="script.js"></script>
-
 </body>
 </html>
