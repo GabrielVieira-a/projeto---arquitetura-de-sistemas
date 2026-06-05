@@ -1,5 +1,12 @@
 # Sistema de Gerenciamento de Tarefas e Usuários
 
+## Integrantes
+
+- Gabriel Vieira Aranha
+- Davi Rodrigues Monteiro Sampaio
+
+---
+
 ## Descrição
 
 Aplicação Full Stack para gerenciamento de tarefas e usuários, desenvolvida para aplicar conceitos de Projeto e Arquitetura de Sistemas.
@@ -33,12 +40,6 @@ O sistema possui:
 
 ---
 
-## Integrantes
-
-- Gabriel Vieira
-- Davi Rodrigues
-
----
 
 ## Tecnologias Utilizadas
 
