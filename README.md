@@ -1,302 +1,190 @@
-# 📌 Sistema de Gerenciamento de Tarefas e Usuários
+# Sistema de Gerenciamento de Tarefas e Usuários
 
-## 📖 Descrição
+## Descrição
 
-Este projeto consiste em uma aplicação Full Stack simples desenvolvida para gerenciar tarefas e usuários.
+Aplicação Full Stack para gerenciamento de tarefas e usuários, desenvolvida para aplicar conceitos de Projeto e Arquitetura de Sistemas.
 
 O sistema possui:
 
-- Frontend separado
-- Backend REST API
-- Arquitetura MVC
-- Arquitetura em Camadas (Layers)
-
-O objetivo principal é aplicar conceitos de Projeto e Arquitetura de Sistemas utilizando boas práticas de desenvolvimento de software.
+- Frontend estático hospedado no Vercel
+- Backend REST API hospedado no Vercel (Serverless Functions)
+- Banco de dados PostgreSQL via Supabase
+- Arquitetura MVC com separação em camadas
 
 ---
 
-# 🎯 Objetivos do Projeto
+## Acesso Online
 
-O projeto foi desenvolvido para aplicar na prática conceitos como:
+| Serviço | URL |
+|---|---|
+| Frontend | https://projeto-arquitetura-de-sistemas.vercel.app |
+| Backend (API) | https://arquitetura-de-sistemas.vercel.app |
+
+---
+
+## Objetivos do Projeto
 
 - Arquitetura MVC
-- Arquitetura em Camadas
+- Arquitetura em Camadas (Layers)
 - REST API
-- Padrões GRASP
-- Padrões GoF
-- Organização de código
+- Padrões GRASP e GoF
 - Separação de responsabilidades
 - Comunicação cliente-servidor
 
 ---
 
-# 👥 Integrantes
+## Integrantes
 
 - Gabriel Vieira
 - Davi Rodrigues
 
 ---
 
-# 🛠️ Tecnologias Utilizadas
+## Tecnologias Utilizadas
 
-## Backend
-
+### Backend
 - Node.js
 - Express
-- JavaScript
+- Supabase (PostgreSQL)
+- Vercel Serverless Functions
 
-## Frontend
-
+### Frontend
 - HTML5
 - CSS3
 - JavaScript
 
+### Infraestrutura
+- Vercel (deploy e hospedagem)
+- Supabase (banco de dados em nuvem)
+- GitHub (controle de versão)
+
 ---
 
-# 🧩 Funcionalidades
+## Funcionalidades
 
-## 📌 Usuários
-
+### Usuários
 - Criar usuário
 - Listar usuários
-- Atualizar usuário
-- Remover usuário
 
----
-
-## 📌 Tarefas
-
+### Tarefas
 - Criar tarefa
 - Listar tarefas
-- Atualizar tarefa
+- Atualizar status da tarefa
 - Remover tarefa
 
 ---
 
-# 🏗️ Arquitetura do Sistema
-
-O projeto foi organizado utilizando arquitetura cliente-servidor.
-
-## Estrutura Geral
-
-```text
-Frontend
-   ↓
-API REST
-   ↓
-Routes
-   ↓
-Controllers
-   ↓
-Services
-   ↓
-Repositories
-   ↓
-Database Singleton
+## Arquitetura do Sistema
 
 ```
-
-# 🚀 Como Executar a Aplicação
-
-## ✅ 1. Clonar o Repositório
-
-```bash
-git clone <URL_DO_REPOSITORIO>
+Frontend (Vercel)
+      ↓
+API REST (Vercel Serverless)
+      ↓
+Routes → Controllers → Services → Repositories
+      ↓
+Database Singleton (Supabase/PostgreSQL)
 ```
 
 ---
 
-## ✅ 2. Acessar a Pasta do Projeto
+## Como Executar Localmente
+
+### 1. Clonar o repositório
 
 ```bash
-cd sistema-tarefas
+git clone https://github.com/GabrielVieira-a/projeto---arquitetura-de-sistemas.git
+cd projeto---arquitetura-de-sistemas
 ```
 
----
-
-# ⚙️ Executando o Backend
-
-## ✅ 3. Entrar na Pasta Backend
+### 2. Configurar o Backend
 
 ```bash
-cd backend
-```
-
----
-
-## ✅ 4. Instalar as Dependências
-
-```bash
+cd sistema-tarefas/backend
 npm install
 ```
 
----
+Crie um arquivo `.env` na pasta `backend` com as variáveis do Supabase:
 
-## ✅ 5. Instalar o CORS
-
-```bash
-npm install cors
+```env
+SUPABASE_URL=https://SEU_PROJECT_ID.supabase.co
+SUPABASE_KEY=SUA_CHAVE_ANON
 ```
 
----
-
-## ✅ 6. Executar o Servidor
+Execute o servidor:
 
 ```bash
 node server.js
 ```
 
----
+O backend estará disponível em `http://localhost:3000`.
 
-## ✅ Resultado Esperado
+### 3. Executar o Frontend
 
-O terminal deverá exibir:
-
-```bash
-Servidor rodando na porta 3000
-```
-
-O backend estará disponível em:
-
-```text
-http://localhost:3000
-```
+Abra o arquivo `sistema-tarefas/frontend/index.html` no navegador ou use a extensão **Live Server** do VSCode.
 
 ---
 
-# 💻 Executando o Frontend
+## Variáveis de Ambiente
 
-## ✅ 7. Abrir a Pasta Frontend
-
-Volte para a raiz do projeto e entre na pasta frontend:
-
-```bash
-cd ../frontend
-```
+| Variável | Descrição |
+|---|---|
+| `SUPABASE_URL` | URL do projeto no Supabase |
+| `SUPABASE_KEY` | Chave anon pública do Supabase |
 
 ---
 
-## ✅ 8. Abrir o Frontend
+## Endpoints da API
 
-Abra o arquivo:
+### Usuários
 
-```text
-index.html
-```
+| Método | Rota | Descrição |
+|---|---|---|
+| GET | `/usuarios` | Lista todos os usuários |
+| POST | `/usuarios` | Cria um novo usuário |
 
-em qualquer navegador.
+### Tarefas
 
-Você também pode utilizar a extensão **Live Server** do VSCode.
-
----
-
-# 🧪 Como Testar o Sistema
-
-## ✅ Testar Usuários
-
-1. Preencha:
-   - Nome
-   - Email
-
-2. Clique em:
-
-```text
-Cadastrar Usuário
-```
-
-3. O usuário deverá aparecer na lista.
+| Método | Rota | Descrição |
+|---|---|---|
+| GET | `/tarefas` | Lista todas as tarefas |
+| POST | `/tarefas` | Cria uma nova tarefa |
+| PUT | `/tarefas/:id` | Atualiza uma tarefa |
+| DELETE | `/tarefas/:id` | Remove uma tarefa |
 
 ---
 
-## ✅ Testar Tarefas
+## Testando com Postman
 
-1. Preencha:
-   - Título
-   - Descrição
-   - Status
-
-2. Clique em:
-
-```text
-Criar Tarefa
+### Criar Usuário
 ```
+POST https://arquitetura-de-sistemas.vercel.app/usuarios
+Content-Type: application/json
 
-3. A tarefa deverá aparecer na lista.
-
----
-
-# 🔗 Testando a API Diretamente
-
-## 📌 Listar Usuários
-
-Abra no navegador:
-
-```text
-http://localhost:3000/usuarios
-```
-
----
-
-## 📌 Listar Tarefas
-
-Abra no navegador:
-
-```text
-http://localhost:3000/tarefas
-```
-
----
-
-# 🧪 Testando com Postman
-
-## ✅ Criar Usuário
-
-### Método:
-```http
-POST
-```
-
-### URL:
-```text
-http://localhost:3000/usuarios
-```
-
-### Body JSON:
-```json
 {
   "nome": "Gabriel",
   "email": "gabriel@email.com"
 }
 ```
 
----
-
-## ✅ Criar Tarefa
-
-### Método:
-```http
-POST
+### Criar Tarefa
 ```
+POST https://arquitetura-de-sistemas.vercel.app/tarefas
+Content-Type: application/json
 
-### URL:
-```text
-http://localhost:3000/tarefas
-```
-
-### Body JSON:
-```json
 {
   "titulo": "Estudar",
-  "descricao": "Arquitetura",
+  "descricao": "Arquitetura de Sistemas",
   "status": "pendente"
 }
 ```
 
----
+### Atualizar Status de Tarefa
+```
+PUT https://arquitetura-de-sistemas.vercel.app/tarefas/1
+Content-Type: application/json
 
-# ⚠️ Observação
-
-O sistema utiliza um banco de dados em memória através do padrão Singleton.
-
-Os dados permanecem armazenados enquanto o servidor estiver em execução.
-Ao reiniciar o servidor, os dados serão apagados.
+{
+  "status": "concluida"
+}
+```
