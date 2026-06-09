@@ -1,0 +1,1141 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documentação — Sistema de Tarefas</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            color: #1a1a2e;
+            background: #fff;
+            font-size: 14px;
+            line-height: 1.7;
+        }
+
+        .cover {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 60px 40px;
+            page-break-after: always;
+        }
+
+        .cover-badge {
+            background: rgba(255,255,255,0.15);
+            border: 1px solid rgba(255,255,255,0.3);
+            border-radius: 50px;
+            padding: 6px 20px;
+            font-size: 12px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 40px;
+        }
+
+        .cover h1 {
+            font-size: 52px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            letter-spacing: -1px;
+        }
+
+        .cover h1 span { color: #e94560; }
+
+        .cover-subtitle {
+            font-size: 20px;
+            opacity: 0.8;
+            margin-bottom: 60px;
+        }
+
+        .cover-divider {
+            width: 60px;
+            height: 3px;
+            background: #e94560;
+            margin: 0 auto 60px;
+        }
+
+        .cover-info {
+            display: flex;
+            gap: 60px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .cover-info-item {
+            text-align: center;
+        }
+
+        .cover-info-item .label {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            opacity: 0.6;
+            margin-bottom: 6px;
+        }
+
+        .cover-info-item .value {
+            font-size: 15px;
+            font-weight: 600;
+        }
+
+        .cover-stack {
+            margin-top: 60px;
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .stack-tag {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 6px;
+            padding: 6px 14px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .page {
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 60px 50px;
+        }
+
+        .page-break { page-break-before: always; }
+
+        h2.section-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #0f3460;
+            margin-bottom: 8px;
+            padding-bottom: 12px;
+            border-bottom: 3px solid #e94560;
+            display: inline-block;
+        }
+
+        .section-intro {
+            color: #555;
+            margin: 20px 0 36px;
+            font-size: 15px;
+        }
+
+        h3.sub-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #16213e;
+            margin: 32px 0 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        h3.sub-title .dot {
+            width: 10px;
+            height: 10px;
+            background: #e94560;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        p { margin-bottom: 12px; color: #333; }
+
+        .highlight-box {
+            background: #f8f9ff;
+            border-left: 4px solid #0f3460;
+            border-radius: 0 8px 8px 0;
+            padding: 16px 20px;
+            margin: 16px 0 24px;
+            font-size: 14px;
+            color: #333;
+        }
+
+        .highlight-box strong { color: #0f3460; }
+
+        .code-block {
+            background: #1a1a2e;
+            color: #a8d8a8;
+            border-radius: 8px;
+            padding: 20px 24px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            margin: 16px 0 24px;
+            overflow-x: auto;
+            line-height: 1.6;
+        }
+
+        .code-block .comment { color: #6a9955; }
+        .code-block .keyword { color: #569cd6; }
+        .code-block .string { color: #ce9178; }
+        .code-block .func { color: #dcdcaa; }
+
+        .file-tree {
+            background: #f4f6fa;
+            border-radius: 8px;
+            padding: 20px 24px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            margin: 16px 0 24px;
+            line-height: 1.9;
+        }
+
+        .file-tree .folder { color: #0f3460; font-weight: 700; }
+        .file-tree .file { color: #444; }
+        .file-tree .desc { color: #888; font-style: italic; font-size: 12px; }
+
+        .flow-diagram {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0;
+            margin: 24px 0;
+            flex-wrap: wrap;
+        }
+
+        .flow-box {
+            background: #0f3460;
+            color: white;
+            border-radius: 8px;
+            padding: 12px 20px;
+            font-size: 13px;
+            font-weight: 600;
+            text-align: center;
+            min-width: 110px;
+        }
+
+        .flow-box.green { background: #1a7f37; }
+        .flow-box.red { background: #e94560; }
+        .flow-box.gray { background: #555; }
+
+        .flow-arrow {
+            color: #0f3460;
+            font-size: 20px;
+            font-weight: 700;
+            padding: 0 8px;
+        }
+
+        .table-wrapper { overflow-x: auto; margin: 16px 0 28px; }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+
+        thead tr { background: #0f3460; color: white; }
+        thead th { padding: 12px 16px; text-align: left; font-weight: 600; }
+
+        tbody tr:nth-child(even) { background: #f4f6fa; }
+        tbody tr:nth-child(odd) { background: #fff; }
+        tbody td { padding: 11px 16px; border-bottom: 1px solid #e8eaf0; color: #333; }
+
+        .badge {
+            display: inline-block;
+            border-radius: 4px;
+            padding: 2px 10px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .badge.get { background: #e3f0ff; color: #0969da; }
+        .badge.post { background: #e6ffed; color: #1a7f37; }
+        .badge.put { background: #fff8e1; color: #b45309; }
+        .badge.del { background: #ffeef0; color: #cf222e; }
+
+        .layer-card {
+            border: 1px solid #e0e4f0;
+            border-radius: 10px;
+            padding: 20px 24px;
+            margin: 16px 0;
+            background: #fff;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+
+        .layer-card-header {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 12px;
+        }
+
+        .layer-num {
+            background: #0f3460;
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        .layer-name { font-size: 16px; font-weight: 700; color: #0f3460; }
+        .layer-file { font-size: 12px; color: #888; font-family: 'Courier New', monospace; }
+
+        .layer-card p { margin: 0; font-size: 14px; color: #444; }
+
+        .env-table td:first-child {
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            color: #0f3460;
+            font-weight: 700;
+        }
+
+        .toc { padding: 60px 50px; max-width: 860px; margin: 0 auto; }
+        .toc h2 { font-size: 28px; font-weight: 700; color: #0f3460; margin-bottom: 30px; }
+
+        .toc-list { list-style: none; }
+        .toc-list li {
+            display: flex;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px dashed #e0e4f0;
+            font-size: 15px;
+        }
+
+        .toc-list li .num {
+            background: #0f3460;
+            color: white;
+            width: 28px;
+            height: 28px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 700;
+            margin-right: 16px;
+            flex-shrink: 0;
+        }
+
+        .toc-list li .dots {
+            flex: 1;
+            border-bottom: 1px dotted #ccc;
+            margin: 0 12px;
+            height: 1px;
+            align-self: flex-end;
+            margin-bottom: 5px;
+        }
+
+        .toc-list li .page-num { color: #888; font-size: 13px; }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin: 20px 0;
+        }
+
+        .info-card {
+            background: #f4f6fa;
+            border-radius: 8px;
+            padding: 16px 20px;
+            border: 1px solid #e0e4f0;
+        }
+
+        .info-card .info-label {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #888;
+            margin-bottom: 6px;
+        }
+
+        .info-card .info-value {
+            font-size: 14px;
+            font-weight: 600;
+            color: #0f3460;
+        }
+
+        @media print {
+            .cover { min-height: 100vh; }
+            .page-break { page-break-before: always; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- CAPA -->
+<div class="cover">
+    <div class="cover-badge">Documentação Técnica</div>
+    <h1>Task<span>Manager</span></h1>
+    <p class="cover-subtitle">Sistema de Gerenciamento de Tarefas</p>
+    <div class="cover-divider"></div>
+    <div class="cover-info">
+        <div class="cover-info-item">
+            <div class="label">Versão</div>
+            <div class="value">1.0.0</div>
+        </div>
+        <div class="cover-info-item">
+            <div class="label">Ambiente</div>
+            <div class="value">Produção</div>
+        </div>
+        <div class="cover-info-item">
+            <div class="label">Deploy</div>
+            <div class="value">Vercel + Supabase</div>
+        </div>
+        <div class="cover-info-item">
+            <div class="label">Data</div>
+            <div class="value">Junho 2026</div>
+        </div>
+    </div>
+    <div class="cover-stack">
+        <span class="stack-tag">Node.js</span>
+        <span class="stack-tag">Express</span>
+        <span class="stack-tag">Supabase</span>
+        <span class="stack-tag">PostgreSQL</span>
+        <span class="stack-tag">HTML / CSS / JS</span>
+        <span class="stack-tag">Vercel</span>
+    </div>
+</div>
+
+<!-- SUMÁRIO -->
+<div class="toc page-break">
+    <h2>Sumário</h2>
+    <ul class="toc-list">
+        <li><span class="num">1</span> Visão Geral do Sistema <span class="dots"></span><span class="page-num">3</span></li>
+        <li><span class="num">2</span> Estrutura de Arquivos <span class="dots"></span><span class="page-num">4</span></li>
+        <li><span class="num">3</span> Arquitetura em Camadas <span class="dots"></span><span class="page-num">5</span></li>
+        <li><span class="num">4</span> Fluxo de uma Requisição <span class="dots"></span><span class="page-num">6</span></li>
+        <li><span class="num">5</span> API — Endpoints de Tarefas <span class="dots"></span><span class="page-num">7</span></li>
+        <li><span class="num">6</span> API — Endpoints de Usuários <span class="dots"></span><span class="page-num">8</span></li>
+        <li><span class="num">7</span> Modelos de Dados <span class="dots"></span><span class="page-num">9</span></li>
+        <li><span class="num">8</span> Banco de Dados — Supabase <span class="dots"></span><span class="page-num">10</span></li>
+        <li><span class="num">9</span> Frontend <span class="dots"></span><span class="page-num">11</span></li>
+        <li><span class="num">10</span> Variáveis de Ambiente <span class="dots"></span><span class="page-num">12</span></li>
+        <li><span class="num">11</span> Deploy — Vercel <span class="dots"></span><span class="page-num">13</span></li>
+        <li><span class="num">12</span> Como Rodar Localmente <span class="dots"></span><span class="page-num">14</span></li>
+    </ul>
+</div>
+
+<!-- SEÇÃO 1 -->
+<div class="page page-break">
+    <h2 class="section-title">1. Visão Geral do Sistema</h2>
+    <p class="section-intro">
+        O TaskManager é uma aplicação web full-stack para gerenciamento de tarefas e usuários. Permite criar, listar, atualizar e deletar tarefas e usuários, com persistência de dados em banco de dados na nuvem.
+    </p>
+
+    <h3 class="sub-title"><span class="dot"></span>O que o sistema faz</h3>
+    <p>O sistema possui duas entidades principais: <strong>Usuários</strong> e <strong>Tarefas</strong>. Para cada uma delas é possível realizar as quatro operações básicas de um sistema CRUD:</p>
+
+    <div class="info-grid">
+        <div class="info-card">
+            <div class="info-label">Criar</div>
+            <div class="info-value">Cadastrar novo usuário ou tarefa</div>
+        </div>
+        <div class="info-card">
+            <div class="info-label">Listar</div>
+            <div class="info-value">Visualizar todos os registros</div>
+        </div>
+        <div class="info-card">
+            <div class="info-label">Atualizar</div>
+            <div class="info-value">Editar dados ou alterar status</div>
+        </div>
+        <div class="info-card">
+            <div class="info-label">Deletar</div>
+            <div class="info-value">Remover um registro pelo ID</div>
+        </div>
+    </div>
+
+    <h3 class="sub-title"><span class="dot"></span>Tecnologias utilizadas</h3>
+
+    <div class="table-wrapper">
+        <table>
+            <thead>
+                <tr>
+                    <th>Tecnologia</th>
+                    <th>Função</th>
+                    <th>Onde é usada</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td>Node.js</td><td>Ambiente de execução JavaScript no servidor</td><td>Backend</td></tr>
+                <tr><td>Express</td><td>Framework para criar a API REST</td><td>Backend</td></tr>
+                <tr><td>Supabase</td><td>Banco de dados PostgreSQL na nuvem</td><td>Backend</td></tr>
+                <tr><td>dotenv</td><td>Carrega variáveis de ambiente do arquivo .env</td><td>Backend</td></tr>
+                <tr><td>cors</td><td>Permite que o frontend acesse a API</td><td>Backend</td></tr>
+                <tr><td>HTML/CSS/JS</td><td>Interface visual da aplicação</td><td>Frontend</td></tr>
+                <tr><td>Vercel</td><td>Hospedagem do backend e frontend na nuvem</td><td>Deploy</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h3 class="sub-title"><span class="dot"></span>Arquitetura geral</h3>
+    <p>O projeto é dividido em dois serviços independentes hospedados na Vercel:</p>
+    <div class="highlight-box">
+        <strong>Frontend</strong> — Páginas HTML/CSS/JS estáticas servidas pela Vercel.<br><br>
+        <strong>Backend</strong> — API REST em Node.js/Express, também hospedada na Vercel como função serverless. Conecta-se ao Supabase para persistência dos dados.
+    </div>
+</div>
+
+<!-- SEÇÃO 2 -->
+<div class="page page-break">
+    <h2 class="section-title">2. Estrutura de Arquivos</h2>
+    <p class="section-intro">Organização completa dos arquivos do projeto e a responsabilidade de cada um.</p>
+
+    <div class="file-tree">
+<span class="folder">projeto---arquitetura-de-sistemas/</span>
+│
+├── <span class="folder">sistema-tarefas/</span>
+│   │
+│   ├── <span class="folder">frontend/</span>
+│   │   ├── <span class="file">index.html</span>      <span class="desc">← tela principal da aplicação</span>
+│   │   ├── <span class="file">style.css</span>       <span class="desc">← estilos visuais</span>
+│   │   ├── <span class="file">script.js</span>       <span class="desc">← lógica do frontend, chamadas à API</span>
+│   │   └── <span class="file">vercel.json</span>     <span class="desc">← configuração de deploy do frontend</span>
+│   │
+│   └── <span class="folder">backend/</span>
+│       ├── <span class="file">server.js</span>           <span class="desc">← ponto de entrada, configura o Express</span>
+│       ├── <span class="file">package.json</span>        <span class="desc">← dependências do projeto</span>
+│       ├── <span class="file">vercel.json</span>         <span class="desc">← configuração de deploy do backend</span>
+│       ├── <span class="file">.env</span>                <span class="desc">← variáveis secretas (não vai ao git)</span>
+│       ├── <span class="file">.gitignore</span>          <span class="desc">← arquivos ignorados pelo git</span>
+│       │
+│       └── <span class="folder">src/</span>
+│           ├── <span class="folder">routes/</span>
+│           │   ├── <span class="file">tarefaRoutes.js</span>   <span class="desc">← rotas da API de tarefas</span>
+│           │   └── <span class="file">usuarioRoutes.js</span>  <span class="desc">← rotas da API de usuários</span>
+│           │
+│           ├── <span class="folder">controllers/</span>
+│           │   ├── <span class="file">tarefaController.js</span>   <span class="desc">← recebe e responde requisições</span>
+│           │   └── <span class="file">usuarioController.js</span>  <span class="desc">← recebe e responde requisições</span>
+│           │
+│           ├── <span class="folder">services/</span>
+│           │   ├── <span class="file">tarefaService.js</span>   <span class="desc">← regras de negócio das tarefas</span>
+│           │   └── <span class="file">usuarioService.js</span>  <span class="desc">← regras de negócio dos usuários</span>
+│           │
+│           ├── <span class="folder">repositories/</span>
+│           │   ├── <span class="file">tarefaRepository.js</span>   <span class="desc">← acesso ao banco (tarefas)</span>
+│           │   └── <span class="file">usuarioRepository.js</span>  <span class="desc">← acesso ao banco (usuários)</span>
+│           │
+│           ├── <span class="folder">models/</span>
+│           │   ├── <span class="file">tarefa.js</span>   <span class="desc">← classe Tarefa</span>
+│           │   └── <span class="file">usuario.js</span>  <span class="desc">← classe Usuario</span>
+│           │
+│           └── <span class="folder">database/</span>
+│               └── <span class="file">singleton.js</span>  <span class="desc">← conexão única com o Supabase</span>
+    </div>
+</div>
+
+<!-- SEÇÃO 3 -->
+<div class="page page-break">
+    <h2 class="section-title">3. Arquitetura em Camadas</h2>
+    <p class="section-intro">
+        O backend segue o padrão de arquitetura em camadas (Layered Architecture), onde cada camada tem uma única responsabilidade e só se comunica com a camada imediatamente abaixo.
+    </p>
+
+    <div class="layer-card">
+        <div class="layer-card-header">
+            <div class="layer-num">1</div>
+            <div>
+                <div class="layer-name">Routes (Rotas)</div>
+                <div class="layer-file">src/routes/tarefaRoutes.js &nbsp;|&nbsp; src/routes/usuarioRoutes.js</div>
+            </div>
+        </div>
+        <p>É a porta de entrada da API. Define quais endereços (URLs) existem e qual método HTTP cada um aceita (GET, POST, PUT, DELETE). Quando uma requisição chega, a rota direciona para o controller correto. Não contém nenhuma lógica — só mapeia URL para função.</p>
+    </div>
+
+    <div class="layer-card">
+        <div class="layer-card-header">
+            <div class="layer-num">2</div>
+            <div>
+                <div class="layer-name">Controllers (Controladores)</div>
+                <div class="layer-file">src/controllers/tarefaController.js &nbsp;|&nbsp; src/controllers/usuarioController.js</div>
+            </div>
+        </div>
+        <p>Recebe o objeto de requisição HTTP (<code>req</code>) e monta a resposta (<code>res</code>). Extrai os dados que vieram do corpo da requisição ou da URL, repassa para o service, e devolve o resultado como JSON. Também trata erros e define os códigos HTTP de resposta (200, 201, 500, etc.).</p>
+    </div>
+
+    <div class="layer-card">
+        <div class="layer-card-header">
+            <div class="layer-num">3</div>
+            <div>
+                <div class="layer-name">Services (Serviços)</div>
+                <div class="layer-file">src/services/tarefaService.js &nbsp;|&nbsp; src/services/usuarioService.js</div>
+            </div>
+        </div>
+        <p>É onde ficam as regras de negócio. Por exemplo: ao criar uma tarefa, se o campo <code>status</code> não for informado, o service define automaticamente como <code>"pendente"</code>. O service não sabe nada sobre HTTP — ele só recebe dados e devolve resultados, chamando o repository para operações de banco.</p>
+    </div>
+
+    <div class="layer-card">
+        <div class="layer-card-header">
+            <div class="layer-num">4</div>
+            <div>
+                <div class="layer-name">Repositories (Repositórios)</div>
+                <div class="layer-file">src/repositories/tarefaRepository.js &nbsp;|&nbsp; src/repositories/usuarioRepository.js</div>
+            </div>
+        </div>
+        <p>Única camada que se comunica diretamente com o banco de dados (Supabase). Encapsula todas as operações: <code>select</code>, <code>insert</code>, <code>update</code> e <code>delete</code>. Se o banco de dados for trocado no futuro, só essa camada precisa ser alterada.</p>
+    </div>
+
+    <div class="layer-card">
+        <div class="layer-card-header">
+            <div class="layer-num">5</div>
+            <div>
+                <div class="layer-name">Models (Modelos)</div>
+                <div class="layer-file">src/models/tarefa.js &nbsp;|&nbsp; src/models/usuario.js</div>
+            </div>
+        </div>
+        <p>Define a estrutura das entidades do sistema. A classe <code>Tarefa</code> possui os campos: <code>id</code>, <code>titulo</code>, <code>descricao</code> e <code>status</code>. A classe <code>Usuario</code> possui: <code>id</code>, <code>nome</code> e <code>email</code>. Cada model também exporta uma função factory para criar instâncias.</p>
+    </div>
+
+    <div class="layer-card">
+        <div class="layer-card-header">
+            <div class="layer-num">6</div>
+            <div>
+                <div class="layer-name">Database — Singleton</div>
+                <div class="layer-file">src/database/singleton.js</div>
+            </div>
+        </div>
+        <p>Cria uma única instância de conexão com o Supabase que é compartilhada em todo o projeto. O padrão Singleton garante que não sejam abertas múltiplas conexões desnecessárias. Utiliza as variáveis de ambiente <code>SUPABASE_URL</code> e <code>SUPABASE_KEY</code> para autenticar.</p>
+    </div>
+</div>
+
+<!-- SEÇÃO 4 -->
+<div class="page page-break">
+    <h2 class="section-title">4. Fluxo de uma Requisição</h2>
+    <p class="section-intro">
+        Veja como um dado percorre todo o sistema, desde o clique do usuário no navegador até o retorno do banco de dados.
+    </p>
+
+    <h3 class="sub-title"><span class="dot"></span>Exemplo: criar uma nova tarefa</h3>
+
+    <div class="flow-diagram">
+        <div class="flow-box red">Navegador<br><small>clica em "Criar Tarefa"</small></div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-box gray">script.js<br><small>POST /tarefas</small></div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-box">tarefaRoutes<br><small>direciona</small></div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-box">Controller<br><small>extrai body</small></div>
+    </div>
+    <div class="flow-diagram" style="margin-top:0">
+        <div class="flow-box">Service<br><small>aplica regras</small></div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-box">Repository<br><small>INSERT no banco</small></div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-box green">Supabase<br><small>salva e retorna</small></div>
+    </div>
+
+    <div class="highlight-box" style="margin-top: 24px;">
+        <strong>1. Navegador</strong> — O usuário preenche o formulário e clica no botão. O <code>script.js</code> faz uma requisição <code>POST</code> para <code>/tarefas</code> com os dados em formato JSON.<br><br>
+        <strong>2. Routes</strong> — O Express identifica que <code>POST /tarefas</code> deve ser tratado pela função <code>tarefaController.criar</code>.<br><br>
+        <strong>3. Controller</strong> — Lê os dados do <code>req.body</code>, chama <code>tarefaService.criar()</code> e aguarda o resultado.<br><br>
+        <strong>4. Service</strong> — Verifica se o status foi informado; se não, define como <code>"pendente"</code>. Chama <code>tarefaRepository.salvar()</code>.<br><br>
+        <strong>5. Repository</strong> — Executa o <code>INSERT</code> na tabela <code>tarefas</code> do Supabase e retorna o registro criado.<br><br>
+        <strong>6. Resposta</strong> — O dado percorre o caminho inverso até chegar ao controller, que responde com status <code>201</code> e o JSON da tarefa criada. O frontend atualiza a lista na tela.
+    </div>
+
+    <h3 class="sub-title"><span class="dot"></span>Detecção de ambiente no Frontend</h3>
+    <p>O <code>script.js</code> detecta automaticamente se está rodando em ambiente local ou em produção:</p>
+
+    <div class="code-block">
+<span class="keyword">const</span> API_URL = window.location.hostname === <span class="string">"localhost"</span>
+    ? <span class="string">"http://localhost:3000"</span>      <span class="comment">// ambiente local</span>
+    : <span class="string">"https://arquitetura-de-sistemas.vercel.app"</span>;  <span class="comment">// produção</span>
+    </div>
+</div>
+
+<!-- SEÇÃO 5 -->
+<div class="page page-break">
+    <h2 class="section-title">5. API — Endpoints de Tarefas</h2>
+    <p class="section-intro">Todos os endpoints disponíveis para operações com tarefas.</p>
+
+    <p><strong>Base URL (produção):</strong> <code>https://arquitetura-de-sistemas.vercel.app</code></p>
+    <p><strong>Base URL (local):</strong> <code>http://localhost:3000</code></p>
+
+    <div class="table-wrapper" style="margin-top:24px">
+        <table>
+            <thead>
+                <tr><th>Método</th><th>Endpoint</th><th>Descrição</th><th>Body</th><th>Retorno</th></tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><span class="badge get">GET</span></td>
+                    <td><code>/tarefas</code></td>
+                    <td>Lista todas as tarefas</td>
+                    <td>—</td>
+                    <td>Array de tarefas</td>
+                </tr>
+                <tr>
+                    <td><span class="badge post">POST</span></td>
+                    <td><code>/tarefas</code></td>
+                    <td>Cria uma nova tarefa</td>
+                    <td>titulo, descricao, status</td>
+                    <td>Tarefa criada (201)</td>
+                </tr>
+                <tr>
+                    <td><span class="badge put">PUT</span></td>
+                    <td><code>/tarefas/:id</code></td>
+                    <td>Atualiza uma tarefa</td>
+                    <td>titulo, descricao, status</td>
+                    <td>Tarefa atualizada</td>
+                </tr>
+                <tr>
+                    <td><span class="badge del">DELETE</span></td>
+                    <td><code>/tarefas/:id</code></td>
+                    <td>Remove uma tarefa</td>
+                    <td>—</td>
+                    <td>{ mensagem: "Removida com sucesso" }</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h3 class="sub-title"><span class="dot"></span>Exemplo — Criar tarefa (POST /tarefas)</h3>
+
+    <p><strong>Requisição:</strong></p>
+    <div class="code-block">
+POST /tarefas
+Content-Type: application/json
+
+{
+    <span class="string">"titulo"</span>: <span class="string">"Revisar relatório"</span>,
+    <span class="string">"descricao"</span>: <span class="string">"Revisar o relatório mensal de vendas"</span>,
+    <span class="string">"status"</span>: <span class="string">"pendente"</span>
+}
+    </div>
+
+    <p><strong>Resposta (201 Created):</strong></p>
+    <div class="code-block">
+{
+    <span class="string">"id"</span>: 1,
+    <span class="string">"titulo"</span>: <span class="string">"Revisar relatório"</span>,
+    <span class="string">"descricao"</span>: <span class="string">"Revisar o relatório mensal de vendas"</span>,
+    <span class="string">"status"</span>: <span class="string">"pendente"</span>
+}
+    </div>
+
+    <h3 class="sub-title"><span class="dot"></span>Status possíveis de uma tarefa</h3>
+    <div class="table-wrapper">
+        <table>
+            <thead><tr><th>Valor</th><th>Descrição</th><th>Cor na interface</th></tr></thead>
+            <tbody>
+                <tr><td><code>pendente</code></td><td>Tarefa ainda não iniciada</td><td>Amarelo</td></tr>
+                <tr><td><code>em andamento</code></td><td>Tarefa em progresso</td><td>Azul</td></tr>
+                <tr><td><code>concluida</code></td><td>Tarefa finalizada</td><td>Verde</td></tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- SEÇÃO 6 -->
+<div class="page page-break">
+    <h2 class="section-title">6. API — Endpoints de Usuários</h2>
+    <p class="section-intro">Todos os endpoints disponíveis para operações com usuários.</p>
+
+    <div class="table-wrapper" style="margin-top:16px">
+        <table>
+            <thead>
+                <tr><th>Método</th><th>Endpoint</th><th>Descrição</th><th>Body</th><th>Retorno</th></tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><span class="badge get">GET</span></td>
+                    <td><code>/usuarios</code></td>
+                    <td>Lista todos os usuários</td>
+                    <td>—</td>
+                    <td>Array de usuários</td>
+                </tr>
+                <tr>
+                    <td><span class="badge post">POST</span></td>
+                    <td><code>/usuarios</code></td>
+                    <td>Cria um novo usuário</td>
+                    <td>nome, email</td>
+                    <td>Usuário criado (201)</td>
+                </tr>
+                <tr>
+                    <td><span class="badge put">PUT</span></td>
+                    <td><code>/usuarios/:id</code></td>
+                    <td>Atualiza um usuário</td>
+                    <td>nome, email</td>
+                    <td>Usuário atualizado</td>
+                </tr>
+                <tr>
+                    <td><span class="badge del">DELETE</span></td>
+                    <td><code>/usuarios/:id</code></td>
+                    <td>Remove um usuário</td>
+                    <td>—</td>
+                    <td>{ mensagem: "Removido com sucesso" }</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h3 class="sub-title"><span class="dot"></span>Exemplo — Criar usuário (POST /usuarios)</h3>
+
+    <p><strong>Requisição:</strong></p>
+    <div class="code-block">
+POST /usuarios
+Content-Type: application/json
+
+{
+    <span class="string">"nome"</span>: <span class="string">"João Silva"</span>,
+    <span class="string">"email"</span>: <span class="string">"joao@email.com"</span>
+}
+    </div>
+
+    <p><strong>Resposta (201 Created):</strong></p>
+    <div class="code-block">
+{
+    <span class="string">"id"</span>: 1,
+    <span class="string">"nome"</span>: <span class="string">"João Silva"</span>,
+    <span class="string">"email"</span>: <span class="string">"joao@email.com"</span>
+}
+    </div>
+
+    <h3 class="sub-title"><span class="dot"></span>Tratamento de erros</h3>
+    <p>Quando ocorre um erro em qualquer operação, a API retorna status <code>500</code> com a mensagem do erro:</p>
+    <div class="code-block">
+{
+    <span class="string">"erro"</span>: <span class="string">"mensagem descrevendo o problema"</span>
+}
+    </div>
+</div>
+
+<!-- SEÇÃO 7 -->
+<div class="page page-break">
+    <h2 class="section-title">7. Modelos de Dados</h2>
+    <p class="section-intro">Estrutura das entidades do sistema e como são representadas no código e no banco.</p>
+
+    <h3 class="sub-title"><span class="dot"></span>Entidade Tarefa</h3>
+    <div class="code-block">
+<span class="keyword">class</span> <span class="func">Tarefa</span> {
+    <span class="func">constructor</span>(id, titulo, descricao, status) {
+        <span class="keyword">this</span>.id       = id;       <span class="comment">// número inteiro, gerado pelo banco</span>
+        <span class="keyword">this</span>.titulo   = titulo;   <span class="comment">// string obrigatória</span>
+        <span class="keyword">this</span>.descricao = descricao; <span class="comment">// string obrigatória</span>
+        <span class="keyword">this</span>.status    = status;   <span class="comment">// "pendente" | "em andamento" | "concluida"</span>
+    }
+}
+    </div>
+
+    <div class="table-wrapper">
+        <table>
+            <thead><tr><th>Campo</th><th>Tipo</th><th>Obrigatório</th><th>Valor padrão</th></tr></thead>
+            <tbody>
+                <tr><td><code>id</code></td><td>Integer</td><td>Gerado pelo banco</td><td>Auto-incremento</td></tr>
+                <tr><td><code>titulo</code></td><td>String</td><td>Sim</td><td>—</td></tr>
+                <tr><td><code>descricao</code></td><td>String</td><td>Sim</td><td>—</td></tr>
+                <tr><td><code>status</code></td><td>String</td><td>Não</td><td><code>"pendente"</code></td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h3 class="sub-title"><span class="dot"></span>Entidade Usuário</h3>
+    <div class="code-block">
+<span class="keyword">class</span> <span class="func">Usuario</span> {
+    <span class="func">constructor</span>(id, nome, email) {
+        <span class="keyword">this</span>.id    = id;    <span class="comment">// número inteiro, gerado pelo banco</span>
+        <span class="keyword">this</span>.nome  = nome;  <span class="comment">// string obrigatória</span>
+        <span class="keyword">this</span>.email = email; <span class="comment">// string obrigatória</span>
+    }
+}
+    </div>
+
+    <div class="table-wrapper">
+        <table>
+            <thead><tr><th>Campo</th><th>Tipo</th><th>Obrigatório</th><th>Valor padrão</th></tr></thead>
+            <tbody>
+                <tr><td><code>id</code></td><td>Integer</td><td>Gerado pelo banco</td><td>Auto-incremento</td></tr>
+                <tr><td><code>nome</code></td><td>String</td><td>Sim</td><td>—</td></tr>
+                <tr><td><code>email</code></td><td>String</td><td>Sim</td><td>—</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h3 class="sub-title"><span class="dot"></span>Padrão Factory</h3>
+    <p>Além das classes, cada model exporta uma função factory que facilita a criação de instâncias sem precisar usar o operador <code>new</code> diretamente:</p>
+    <div class="code-block">
+<span class="comment">// em vez de: new Tarefa(id, titulo, descricao, status)</span>
+<span class="keyword">const</span> tarefa = <span class="func">criarTarefa</span>(id, titulo, descricao, status);
+    </div>
+</div>
+
+<!-- SEÇÃO 8 -->
+<div class="page page-break">
+    <h2 class="section-title">8. Banco de Dados — Supabase</h2>
+    <p class="section-intro">O Supabase é um serviço de banco de dados PostgreSQL na nuvem com autenticação via chave de API.</p>
+
+    <h3 class="sub-title"><span class="dot"></span>Conexão — Padrão Singleton</h3>
+    <p>O arquivo <code>singleton.js</code> cria uma única instância do cliente Supabase que é compartilhada em todo o projeto:</p>
+    <div class="code-block">
+<span class="keyword">const</span> { createClient } = <span class="func">require</span>(<span class="string">'@supabase/supabase-js'</span>);
+
+<span class="keyword">const</span> supabase = <span class="func">createClient</span>(
+    process.env.SUPABASE_URL,   <span class="comment">// URL do projeto</span>
+    process.env.SUPABASE_KEY    <span class="comment">// chave anon public</span>
+);
+
+module.exports = supabase;
+    </div>
+
+    <h3 class="sub-title"><span class="dot"></span>Operações no banco</h3>
+    <div class="table-wrapper">
+        <table>
+            <thead><tr><th>Operação</th><th>Código Supabase</th><th>SQL equivalente</th></tr></thead>
+            <tbody>
+                <tr>
+                    <td>Listar tudo</td>
+                    <td><code>.from('tarefas').select('*')</code></td>
+                    <td><code>SELECT * FROM tarefas</code></td>
+                </tr>
+                <tr>
+                    <td>Inserir</td>
+                    <td><code>.from('tarefas').insert(dados)</code></td>
+                    <td><code>INSERT INTO tarefas ...</code></td>
+                </tr>
+                <tr>
+                    <td>Atualizar</td>
+                    <td><code>.from('tarefas').update(dados).eq('id', id)</code></td>
+                    <td><code>UPDATE tarefas SET ... WHERE id = ?</code></td>
+                </tr>
+                <tr>
+                    <td>Deletar</td>
+                    <td><code>.from('tarefas').delete().eq('id', id)</code></td>
+                    <td><code>DELETE FROM tarefas WHERE id = ?</code></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h3 class="sub-title"><span class="dot"></span>Tabelas necessárias no Supabase</h3>
+    <p>O projeto espera que duas tabelas existam no banco:</p>
+
+    <div class="code-block">
+<span class="comment">-- Tabela de tarefas</span>
+<span class="keyword">CREATE TABLE</span> tarefas (
+    id        SERIAL PRIMARY KEY,
+    titulo    TEXT NOT NULL,
+    descricao TEXT NOT NULL,
+    status    TEXT DEFAULT <span class="string">'pendente'</span>
+);
+
+<span class="comment">-- Tabela de usuários</span>
+<span class="keyword">CREATE TABLE</span> usuarios (
+    id    SERIAL PRIMARY KEY,
+    nome  TEXT NOT NULL,
+    email TEXT NOT NULL
+);
+    </div>
+
+    <div class="highlight-box">
+        <strong>Onde criar as tabelas:</strong> No painel do Supabase, acesse <strong>SQL Editor</strong> e execute os comandos acima para criar as tabelas.
+    </div>
+</div>
+
+<!-- SEÇÃO 9 -->
+<div class="page page-break">
+    <h2 class="section-title">9. Frontend</h2>
+    <p class="section-intro">Interface visual da aplicação, construída com HTML, CSS e JavaScript puro — sem frameworks.</p>
+
+    <h3 class="sub-title"><span class="dot"></span>index.html</h3>
+    <p>Contém a estrutura da página com dois painéis principais: um para Usuários e outro para Tarefas. Cada painel tem um formulário de criação e uma lista de exibição.</p>
+
+    <div class="highlight-box">
+        <strong>Header</strong> — Logo e título da aplicação.<br><br>
+        <strong>Painel de Usuários</strong> — Campos: Nome completo e E-mail. Botão para cadastrar. Lista com todos os usuários.<br><br>
+        <strong>Painel de Tarefas</strong> — Campos: Título, Descrição e Status (select). Botão para criar. Lista com todas as tarefas e opção de alterar status.<br><br>
+        <strong>Toast</strong> — Notificação que aparece brevemente na tela após cada ação.
+    </div>
+
+    <h3 class="sub-title"><span class="dot"></span>script.js — Funções principais</h3>
+    <div class="table-wrapper">
+        <table>
+            <thead><tr><th>Função</th><th>O que faz</th></tr></thead>
+            <tbody>
+                <tr><td><code>criarUsuario()</code></td><td>Lê os campos do formulário e faz POST /usuarios</td></tr>
+                <tr><td><code>listarUsuarios()</code></td><td>Faz GET /usuarios e renderiza a lista na tela</td></tr>
+                <tr><td><code>criarTarefa()</code></td><td>Lê os campos do formulário e faz POST /tarefas</td></tr>
+                <tr><td><code>listarTarefas()</code></td><td>Faz GET /tarefas e renderiza a lista na tela</td></tr>
+                <tr><td><code>atualizarStatus(id, status)</code></td><td>Faz PUT /tarefas/:id ao selecionar novo status</td></tr>
+                <tr><td><code>showToast(message)</code></td><td>Exibe notificação temporária na tela</td></tr>
+                <tr><td><code>getStatusClass(status)</code></td><td>Retorna a classe CSS de cor para o badge de status</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h3 class="sub-title"><span class="dot"></span>style.css</h3>
+    <p>Estiliza a aplicação com design moderno. Usa a fonte <strong>Inter</strong> do Google Fonts. Os elementos principais são:</p>
+    <div class="info-grid">
+        <div class="info-card"><div class="info-label">Cards</div><div class="info-value">Painéis com sombra e bordas arredondadas</div></div>
+        <div class="info-card"><div class="info-label">Badges de Status</div><div class="info-value">Cores diferentes por status da tarefa</div></div>
+        <div class="info-card"><div class="info-label">Toast</div><div class="info-value">Notificação que aparece e some automaticamente</div></div>
+        <div class="info-card"><div class="info-label">Layout</div><div class="info-value">Grid responsivo com dois painéis lado a lado</div></div>
+    </div>
+</div>
+
+<!-- SEÇÃO 10 -->
+<div class="page page-break">
+    <h2 class="section-title">10. Variáveis de Ambiente</h2>
+    <p class="section-intro">
+        Variáveis de ambiente são configurações sensíveis que ficam fora do código-fonte. No ambiente local ficam no arquivo <code>.env</code>; em produção são configuradas no painel da Vercel.
+    </p>
+
+    <h3 class="sub-title"><span class="dot"></span>Variáveis necessárias</h3>
+    <div class="table-wrapper">
+        <table class="env-table">
+            <thead><tr><th>Variável</th><th>Descrição</th><th>Onde encontrar</th></tr></thead>
+            <tbody>
+                <tr>
+                    <td>SUPABASE_URL</td>
+                    <td>URL do projeto no Supabase</td>
+                    <td>Supabase → Project Settings → API → Project URL</td>
+                </tr>
+                <tr>
+                    <td>SUPABASE_KEY</td>
+                    <td>Chave de acesso anon/public</td>
+                    <td>Supabase → Project Settings → API → anon public</td>
+                </tr>
+                <tr>
+                    <td>PORT</td>
+                    <td>Porta do servidor local</td>
+                    <td>Definida manualmente (padrão: 3000)</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h3 class="sub-title"><span class="dot"></span>Arquivo .env (ambiente local)</h3>
+    <div class="code-block">
+SUPABASE_URL=https://seuprojeto.supabase.co
+SUPABASE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+PORT=3000
+    </div>
+
+    <div class="highlight-box">
+        <strong>Segurança:</strong> O arquivo <code>.env</code> está listado no <code>.gitignore</code>, o que significa que ele nunca é enviado ao GitHub. Cada desenvolvedor precisa criar o seu próprio arquivo <code>.env</code> com as credenciais corretas.
+    </div>
+
+    <h3 class="sub-title"><span class="dot"></span>Como configurar na Vercel (produção)</h3>
+    <p>Para que o backend em produção funcione, as mesmas variáveis precisam ser cadastradas no painel da Vercel:</p>
+
+    <div class="highlight-box">
+        1. Acesse <strong>vercel.com</strong> → seu projeto de backend<br>
+        2. Vá em <strong>Settings → Environment Variables</strong><br>
+        3. Adicione <code>SUPABASE_URL</code> e <code>SUPABASE_KEY</code> com os mesmos valores do <code>.env</code><br>
+        4. Clique em <strong>Save</strong> e depois em <strong>Redeploy</strong>
+    </div>
+</div>
+
+<!-- SEÇÃO 11 -->
+<div class="page page-break">
+    <h2 class="section-title">11. Deploy — Vercel</h2>
+    <p class="section-intro">O projeto usa dois deployments separados na Vercel: um para o backend (API) e um para o frontend.</p>
+
+    <h3 class="sub-title"><span class="dot"></span>Backend — vercel.json</h3>
+    <p>O arquivo <code>backend/vercel.json</code> instrui a Vercel a tratar o <code>server.js</code> como uma função Node.js e redirecionar todas as rotas para ele:</p>
+    <div class="code-block">
+{
+    <span class="string">"version"</span>: 2,
+    <span class="string">"builds"</span>: [
+        { <span class="string">"src"</span>: <span class="string">"server.js"</span>, <span class="string">"use"</span>: <span class="string">"@vercel/node"</span> }
+    ],
+    <span class="string">"routes"</span>: [
+        { <span class="string">"src"</span>: <span class="string">"/(.*)"</span>, <span class="string">"dest"</span>: <span class="string">"/server.js"</span> }
+    ]
+}
+    </div>
+
+    <h3 class="sub-title"><span class="dot"></span>Informações de produção</h3>
+    <div class="table-wrapper">
+        <table>
+            <thead><tr><th>Serviço</th><th>URL</th><th>Plataforma</th></tr></thead>
+            <tbody>
+                <tr>
+                    <td>Backend (API)</td>
+                    <td><code>https://arquitetura-de-sistemas.vercel.app</code></td>
+                    <td>Vercel (Node.js)</td>
+                </tr>
+                <tr>
+                    <td>Frontend</td>
+                    <td>URL do projeto frontend na Vercel</td>
+                    <td>Vercel (Static)</td>
+                </tr>
+                <tr>
+                    <td>Banco de dados</td>
+                    <td>pfcwizxvepuklbrogrtf.supabase.co</td>
+                    <td>Supabase (PostgreSQL)</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h3 class="sub-title"><span class="dot"></span>Como funciona o deploy automático</h3>
+    <div class="highlight-box">
+        A Vercel está conectada ao repositório GitHub. A cada <code>git push</code> na branch <code>main</code>, ela detecta as mudanças e faz um novo deploy automaticamente — tanto do backend quanto do frontend.
+    </div>
+</div>
+
+<!-- SEÇÃO 12 -->
+<div class="page page-break">
+    <h2 class="section-title">12. Como Rodar Localmente</h2>
+    <p class="section-intro">Passo a passo para executar o projeto na sua máquina.</p>
+
+    <h3 class="sub-title"><span class="dot"></span>Pré-requisitos</h3>
+    <div class="info-grid">
+        <div class="info-card"><div class="info-label">Node.js</div><div class="info-value">v18 ou superior</div></div>
+        <div class="info-card"><div class="info-label">npm</div><div class="info-value">Incluído com o Node.js</div></div>
+        <div class="info-card"><div class="info-label">Conta Supabase</div><div class="info-value">Com projeto criado e tabelas configuradas</div></div>
+        <div class="info-card"><div class="info-label">Arquivo .env</div><div class="info-value">Com SUPABASE_URL e SUPABASE_KEY</div></div>
+    </div>
+
+    <h3 class="sub-title"><span class="dot"></span>Passo 1 — Clonar o repositório</h3>
+    <div class="code-block">
+git clone https://github.com/seu-usuario/seu-repositorio.git
+cd projeto---arquitetura-de-sistemas
+    </div>
+
+    <h3 class="sub-title"><span class="dot"></span>Passo 2 — Instalar dependências do backend</h3>
+    <div class="code-block">
+cd sistema-tarefas/backend
+npm install
+    </div>
+
+    <h3 class="sub-title"><span class="dot"></span>Passo 3 — Criar o arquivo .env</h3>
+    <p>Crie o arquivo <code>sistema-tarefas/backend/.env</code> com o seguinte conteúdo:</p>
+    <div class="code-block">
+SUPABASE_URL=https://seuprojeto.supabase.co
+SUPABASE_KEY=sua_chave_anon_public
+PORT=3000
+    </div>
+
+    <h3 class="sub-title"><span class="dot"></span>Passo 4 — Iniciar o servidor</h3>
+    <div class="code-block">
+npm run dev
+<span class="comment"># Saída esperada: Servidor rodando na porta 3000</span>
+    </div>
+
+    <h3 class="sub-title"><span class="dot"></span>Passo 5 — Abrir o frontend</h3>
+    <p>Abra o arquivo <code>sistema-tarefas/frontend/index.html</code> diretamente no navegador. O <code>script.js</code> detecta automaticamente que está em <code>localhost</code> e direciona as requisições para <code>http://localhost:3000</code>.</p>
+
+    <div class="highlight-box">
+        <strong>Pronto!</strong> O sistema estará funcional localmente. Qualquer alteração salva no código é refletida ao recarregar o navegador. Para parar o servidor, pressione <strong>Ctrl + C</strong> no terminal.
+    </div>
+
+    <h3 class="sub-title"><span class="dot"></span>Resumo dos comandos</h3>
+    <div class="code-block">
+<span class="comment"># Instalar</span>
+cd sistema-tarefas/backend &amp;&amp; npm install
+
+<span class="comment"># Rodar</span>
+npm run dev
+
+<span class="comment"># Parar</span>
+Ctrl + C
+    </div>
+</div>
+
+</body>
+</html>

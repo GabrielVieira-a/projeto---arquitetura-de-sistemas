@@ -18,12 +18,10 @@ function getStatusClass(status) {
     return 'status-default';
 }
 
-/* =========================
-   USUÁRIOS
-========================= */
+/* Usuarios (Criaçao)*/
 
 async function criarUsuario() {
-    const nome = document.getElementById("nomeUsuario").value.trim();
+    const nome= document.getElementById("nomeUsuario").value.trim();
     const email = document.getElementById("emailUsuario").value.trim();
 
     if (!nome || !email) {
@@ -75,9 +73,7 @@ function limparCamposUsuario() {
     document.getElementById("emailUsuario").value = "";
 }
 
-/* =========================
-   TAREFAS
-========================= */
+/* tarefas */
 
 async function criarTarefa() {
     const titulo = document.getElementById("tituloTarefa").value.trim();
@@ -157,9 +153,7 @@ function limparCamposTarefa() {
     document.getElementById("statusTarefa").value = "";
 }
 
-/* =========================
-   INICIALIZAÇÃO
-========================= */
+/* Inicia */
 
 listarUsuarios();
 listarTarefas();
