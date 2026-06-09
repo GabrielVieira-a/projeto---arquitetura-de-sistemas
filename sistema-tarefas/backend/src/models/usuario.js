@@ -1,3 +1,5 @@
+// MODEL — define o formato/estrutura de um usuário
+// é o "molde" do objeto que circula pela aplicação
 class Usuario {
     constructor(id, nome, email) {
         this.id = id;
@@ -6,7 +8,7 @@ class Usuario {
     }
 }
 
-// Factory
+// Factory — jeito alternativo de criar um Usuario sem usar o "new" direto
 function criarUsuario(id, nome, email) {
     return new Usuario(id, nome, email);
 }

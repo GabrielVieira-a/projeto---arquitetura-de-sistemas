@@ -1,34 +1,40 @@
+// REPOSITORY — única camada que fala diretamente com o banco
+// toda query do Supabase fica aqui, o resto do código não sabe como o banco funciona
 const supabase = require('../database/singleton');
 
 class UsuarioRepository {
 
+    // busca todos os usuários da tabela
     async listar() {
         const { data, error } = await supabase.from('usuarios').select('*');
         if (error) throw error;
         return data;
     }
 
+    // insere um usuário novo e retorna o registro criado
     async salvar(usuario) {
         const { data, error } = await supabase
             .from('usuarios')
             .insert(usuario)
             .select()
-            .single();
+            .single(); // .single() garante que retorna um objeto e não um array
         if (error) throw error;
         return data;
     }
 
+    // atualiza os campos do usuário onde o id bater
     async atualizar(id, dados) {
         const { data, error } = await supabase
             .from('usuarios')
             .update(dados)
-            .eq('id', id)
+            .eq('id', id) // .eq() é o WHERE id = ?
             .select()
             .single();
         if (error) throw error;
         return data;
     }
 
+    // deleta o usuário onde o id bater
     async deletar(id) {
         const { error } = await supabase
             .from('usuarios')
@@ -38,4 +44,5 @@ class UsuarioRepository {
     }
 }
 
+// exporta já instanciado — padrão singleton, uma única instância pra todo o app
 module.exports = new UsuarioRepository();

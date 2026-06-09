@@ -1,5 +1,9 @@
+// CONTROLLER — porta de entrada da API pra tarefas
+// recebe a requisição HTTP, chama o service e devolve a resposta
+// não tem lógica de negócio aqui, só repassa e trata erro
 const tarefaService = require('../services/tarefaService');
 
+// POST /tarefas — cria uma nova tarefa com os dados do body
 exports.criar = async (req, res) => {
     try {
         const tarefa = await tarefaService.criar(req.body);
@@ -9,6 +13,7 @@ exports.criar = async (req, res) => {
     }
 };
 
+// GET /tarefas — retorna todas as tarefas
 exports.listar = async (req, res) => {
     try {
         const tarefas = await tarefaService.listar();
@@ -18,6 +23,7 @@ exports.listar = async (req, res) => {
     }
 };
 
+// PUT /tarefas/:id — atualiza uma tarefa pelo id que vem na URL
 exports.atualizar = async (req, res) => {
     try {
         const tarefa = await tarefaService.atualizar(req.params.id, req.body);
@@ -27,6 +33,7 @@ exports.atualizar = async (req, res) => {
     }
 };
 
+// DELETE /tarefas/:id — remove uma tarefa pelo id
 exports.deletar = async (req, res) => {
     try {
         await tarefaService.deletar(req.params.id);
